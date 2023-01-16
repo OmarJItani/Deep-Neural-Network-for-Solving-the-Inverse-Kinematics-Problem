@@ -4,15 +4,20 @@
 In this project, it is intended to develop adeep neural network model for solving the inverse kinematics problem for the planar robotic manipulator with two revolute joints presented in Fig. 1. To train the neural network, a large dataset of joint angles and their corresponding end effector position and orientation will be needed. We will utilize the forward kinematic equations in (1) of the tackled robotic manipulator to generate this data set. Afterwards, we will train a deep network on the generated data and validate its performance on an unseen test data.
 
 $$ x = l_1 cos(\theta_1) + l_2 cos(\theta_2) $$
+
 $$ y = l_1 sin(\theta_1) + l_2 sin(\theta_2) $$
 
-<img src="read_me_images/two_link_arm.png" width="300" align="middle">
-
+<p align="center">
+<img src="read_me_images/two_link_arm.png" width="300">
+</p>
+  
 ## Challenge
 The challenge or difficulty in training a neural network to solve the inverse kinematics problem is the fact that the same end effector position (input of the neural network) can be achieved via several sets of joints variables (neural network output). In other words, the mapping between the neural network’s inputs and outputs is not one to one. This can be seen in Fig. 2 where the two-link robotic manipulator is capableof catching the same red ball, i.e., arriving at the same position, via two different joint configurations. To solve this issue, we should preprocess the data (or even change the format of the input and output data) to ensure that the function the neural network is trying to learn is one to one. One way to solve this redundacny problem is to pass the manipulator’s shape at the previous time instant as an input to the neural network. This additional input should guide the manipulator to the desired shape given that the manipulator’s motion is smooth (no sudden jumps).
 
+<p align="center">
 <img src="read_me_images/challenge_redundancy.png" width="300" align="middle">
-
+</p>
+  
 ## Data Generation
 We start by assuming that the range of motion of the systems’ joints is limited to $[−\pi, \pi]$. Afterwards, we discretize the shape space into $n$ evenly spaced samples for each axis. Given that the considered system has two degrees of freedom, the discretization yields $n^2$ sample points spanning the entire shape space of the robot. In our example, we set $n$ to $20$. Then, for each of these sample points, which represent a specific set of joint variables, we utilize the forward kinematics equations to determine the corresponding position of the end-effector.
 
@@ -22,8 +27,10 @@ Accordingly, we now have a dataset of $mn^2$ data samples, where each sample is 
 
 The dataset is displayed in Fig. 3. The blue points in Fig. 3a represent the generated sample points in the shape space of the manipulator. These sample points map to the end-effector position space as shown in Fig. 3b. We can see from Fig. 3 that the generated dataset spans the entire shape space and motion space of the robot. For each data sample (blue point) in Fig.3a, the $m$ slightly varying manipulator shapes are represented by the red points.
 
-<img src="read_me_images/Dataset_visualization.png" width="300" align="middle">
-
+<p align="center">
+<img src="read_me_images/Dataset_visualization.png" width="800" align="middle">
+</p>
+  
 The generated dataset is saved into the “output.csv” file.
 
 ## Training and Testing the model
@@ -42,7 +49,7 @@ The cost functionto be minimized is the mean square error between the predicted 
 
 ### Training and Testing
 
-The generated dataset is divided randomly into $90\%$ training data and $10\%$ testing data. The root mean squared error of the training dataset and testing dataset is $0.0454$rads and $0.0459$rads, respectively. The trained model is saved in “arm model.h5” file.
+The generated dataset is divided randomly into $90\%$ training data and $10\%$ testing data. The root mean squared error of the training dataset and testing dataset is $0.0454$ rads and $0.0459$ rads, respectively. The trained model is saved in “arm model.h5” file.
 
 ## Simulation
 
@@ -56,5 +63,7 @@ The given trajectories are discretized over the specified time domain with a con
 
 After predicting the manipulator’s shape for all time instants, the motion of the robot is simulated. This is implemented in the “test arm model.py” file. Snapshots of the manipulator’s motion for “Trajectory 1” and “Trajectory 2” are shown in Fig. 4 and Fig. 5, respectively.
 
-<img src="read_me_images/Traj_1.png" width="300" align="middle">
-<img src="read_me_images/Traj_2.png" width="300" align="middle">
+<p align="center">
+<img src="read_me_images/Traj_1.png" width="800" align="middle">
+<img src="read_me_images/Traj_2.png" width="800" align="middle">
+</p>
